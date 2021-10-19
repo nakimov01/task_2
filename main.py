@@ -27,12 +27,10 @@ def watch_current_product(id: int):
 @app.post("/api/products/new")
 def create_new_product(id: int, name: str, description: str, prise:float):
     global char
-    mag = {
-        "id": id,
-        "name": name,
-        "description": description,
-        "prise": prise
-    }
+    for i in range(len(char)):
+        if char[i]["id"] == id:
+            return "Товар с id таким уже существует"
+    mag = {"id": id, "name": name,"description": description,"prise": prise}
     char.append(mag)
     return char
 
@@ -51,10 +49,10 @@ def edit_product(id: int, name: str, description: str, prise:float):
 def delete_product(id: int):
     global char
     for i in range(len(char)):
-        if char[i]["id"] != id:
+        if char[i]["id"] == id:
             del char[i]
-            return {"Ошибка": "Запрос не был найден"}
-    return {"Ответ": "Запрос был удален"}
+            return {"Ответ": "Запрос был удален"}
+    return {"Ошибка": "Запрос не был найден"}
 
 if __name__ == '__main__':
     uvicorn.run(app, host = "127.0.0.1", port=8000)
